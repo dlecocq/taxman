@@ -1,19 +1,49 @@
 var Taxman = Object({
-	onload: function() {
-		var revenue = Graph("revenue_graph");
-		revenue.setData([
+	revenue : null,
+	tax     : null,
+	// All values are in millions of dollars
+	budget  : {
+		'defense' : {
+			'supplies': 1000,
+			'payroll' : 500,
+		},
+		'science' : {
+			'nasa'    : 19,
+			'research': 200,
+		},
+		'education': {
+			'teachers': 2,
+			'pooping' : 50
+		}
+	},
+	
+	printbudget: function() {
+		for (var department_name in this.budget) {
+			console.log(department);
+			var total = 0;
+			var department = this.budget[department_name];
+			for (var division_name in department) {
+				var value = department[division_name];
+				console.log('We spend $' + value + 'M on ' + division_name);
+			}
+		}
+	},
+	
+	onload  : function() {
+		this.revenue = Graph("revenue_graph");
+		this.revenue.setData([
 			[0, 20],
 			[20, 10],
-			[30, 20],
-			[101, 50]
-		]);
-		
-		var tax = Graph("tax_graph");
-		tax.setData([
-			[1, 2],
-			[3, 4],
+			[50, 20],
 			[100, 50]
 		]);
+		
+		// this.tax = Graph("tax_graph");
+		// this.tax.setData([
+		// 	[1, 2],
+		// 	[3, 4],
+		// 	[100, 50]
+		// ]);
 	}
 });
 
@@ -63,6 +93,7 @@ var _Graph = Object({
 		// Create a paper object
 		this.paper  = Raphael(id, this.width, this.height);
 		
+		console.log('initialize');
 		// This is the path for the graph
 		this.path   = this.paper.path().attr({
 			"stroke"      : this.color,
@@ -79,7 +110,7 @@ var _Graph = Object({
 		// Not sure what to make of these, yet, either
 		this.blankets = this.paper.set();
 		this.buttons  = this.paper.set();
-	}
+	},
 	
 	addPoint : function(x, y, redraw) {
 		if (y == null) {
@@ -110,7 +141,7 @@ var _Graph = Object({
 		}
 	},
 	
-	blankets : function() {
+	makeBlankets : function() {
 		for (var i = 0; i < this.data.length; i++) {
 			var datum = _Graph.pointToPixel(this.data[i]);
 			this.buttons.push(this.paper.circle(datum[0], datum[1], 5).attr({
@@ -140,12 +171,13 @@ var _Graph = Object({
 			
 			this.blankets.push(blanket);
 		}
-	}
+	},
 	
 	setData : function(d) {
 		this.data = d;
 		this.data.sort(function(a,b) { return b - a; });
-		this.draw();
+		this.path = this.paper.path();
+		this.drawPath();
 	},
 	
 	pointToPixel : function(p) {
@@ -171,46 +203,11 @@ var _Graph = Object({
 			var datum = _Graph.pointToPixel(this.data[i]);
 			p.push(datum[0], datum[1]);
 		}
-		p = ["M", X[0], Y[0], "R"].concat(p);
-		var subaddon = "L" + (W - 10) + "," + (H - 10) + ",50," + (H - 10) + "z";
+		var datum = _Graph.pointToPixel(this.data[0]);
+		p = ["M", datum[0], datum[1], "R"].concat(p);
+		var subaddon = "L" + (this.width - 10) + "," + (this.height - 10) + ",50," + (this.height - 10) + "z";
 		this.path.attr({path: p});
 		this.sub.attr({path: p + subaddon});
-	},
-	
-	draw : function(p) {
-		// If a temporary point was provided, use it
-		var tmpdata = Object(this.data);
-		if (p != null) {
-			tmpdata.push(p);
-			console.log('Temporarily pushing on ' + p);
-			tmpdata.sort(function(a,b) { return b - a; });
-		}
-		
-		var strdata = [];
-		for (var index = 0; index < tmpdata.length; index++) {
-			var datum = this.pointToPixel(tmpdata[index]);
-			
-			strdata.push(datum[0] + "," + datum[1]);
-			
-			// Draw a circle at this point
-			var circle = this.paper.circle(datum[0], datum[1], 7);
-			circle.attr("fill", "#000");
-			circle.attr("stroke", "#000");
-			circle.drag(function(dx, dy, x, y, evt) {
-				this.draw(this.pixelToPoint([x, y]));
-			}, function(x, y, evt) {
-				this.removePoint(this.pixelToPoint([x, y]));
-			}, function(evt) {
-				this.addPoint(this.pixelToPoint([evt.x, evt.y]));
-				this.draw();
-			}, this, this, this);
-		}
-		
-		if (this.path != null) {
-			this.path.clear();	
-		}
-		this.path = this.paper.path("M" + strdata.join("L"));
-		this.path.attr("stroke", "#f00");
-		this.path.attr("stroke-width", 2);
+		this.makeBlankets();
 	}
 });
