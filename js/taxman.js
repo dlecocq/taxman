@@ -113,12 +113,12 @@ var _Graph = Object({
 	blankets : function() {
 		for (var i = 0; i < this.data.length; i++) {
 			var datum = _Graph.pointToPixel(this.data[i]);
-			this.buttons.push(r.circle(datum[0], datum[1], 5).attr({
+			this.buttons.push(this.paper.circle(datum[0], datum[1], 5).attr({
 				"fill"  : this.color,
 				"stroke": "none"
 			}));
 			
-			var blanket = r.circle(datum[0], datum[1], 2).attr({
+			var blanket = this.paper.circle(datum[0], datum[1], 2).attr({
 				"stroke" : "none",
 				"fill"   : "#fff",
 				"opacity": 0
@@ -126,9 +126,7 @@ var _Graph = Object({
 			// Make a reference to this graph
 			blanket.graph = this;
 			blanket.drag(function(dx, dy) {
-				this.graph.update()
-				var start = this.start;
-				start && 
+				this.graph.update();
 			}, function(x, y) {
 				// Save some starting information
 				this.start = {
@@ -142,20 +140,6 @@ var _Graph = Object({
 			
 			this.blankets.push(blanket);
 		}
-		this.buttons.push(this.paper.circle)
-		for (i = 0, ii = values.length - 1; i < ii; i++) {
-            var xy = translate(i, values[i]),
-                xy1 = translate(i + 1, values[i + 1]),
-                f;
-            X[i] = xy[0];
-            Y[i] = xy[1];
-            if (i == ii - 1) {
-                f(i + 1, xy1);
-            }
-        }
-        xy = translate(ii, values[ii]);
-        X.push(xy[0]);
-        Y.push(xy[1]);
 	}
 	
 	setData : function(d) {
