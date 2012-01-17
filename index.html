@@ -2,25 +2,49 @@
 	<head>
 		<title>Taxman</title>
 		<link rel="stylesheet" href="css/style.css">
-		<script src="js/raphael-min.js"></script>
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css" type="text/css" media="all" />
+		<!-- taxman -->
+		<script src="js/data.js">  </script>
+		<script src="js/budget.js"></script>
 		<script src="js/taxman.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<!-- räphael -->
+		<script src="js/raphael-min.js"></script>
+		<!-- jquery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 		<script>
+			/* The makeBudgetItem function should take the name of a
+			 * department, and an amount currently budgeted for that
+			 * department, and insert the following into the "budget"
+			 * container:
+			 *
+			 * <div>
+			 *		<div>name of department</div>
+			 * 		<div>$ amount M</div>
+			 * </div>
+			 */
+			var makeBudgetItem = function(name, amount) {
+				
+			}
+			
 			$(document).ready(function() {
-				Taxman.onload()
+				Taxman.onload();
 			});
 		</script>
 	</head>
 	<body>
-		<p>Hello</p>
+		<div id="hello">
+			Hello
+		</div>
 		<div id="container">
 			<div id="graphs_container">
 				<div id="revenue_graph"></div>
 				<div id="tax_graph"></div>
 			</div>
 			<div id="budget_container">
-				<div id="budget"></div>
+				<div id="budget">
+					
+				</div>
 			</div>
 		</div>
 	</body>

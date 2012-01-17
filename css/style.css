@@ -16,7 +16,8 @@
 #revenue_graph {
 	width: 480px;
 	height: 300px;
-	background-color: yellow;
+	margin-bottom: 10px;
+	background-color: white;
 }
 
 #tax_graph {
